@@ -1,0 +1,32 @@
+whatcloud: Which cloud am I in?
+(☺) 2016 Josef Spillner <josef.spillner@zhaw.ch>
+================================================
+
+Whatcloud detects the caller's IP address and checks if it is located
+within known cloud provider allocations. The tool is implemented as a
+PHP script intended to be hosted in the cloud as well. For Bluemix and
+other Cloudfoundry-based providers, create a suitable PHP project and
+use 'cf push' to deploy. Otherwise, replace HTTP_X_CLIENT_IP by
+REMOTE_ADDR to make it work.
+
+The tool returns the provider identification as plain text when invoked
+at the root URL (/). Alternatively, call /ip to see the detected IP
+address without an attempt to find the provider. The service is logging
+all requests. The logfile is protected and can be retrieved by
+authorised parties (/logs/<secret>).
+
+The matching rules are read from a CSV file which is evaluated for all
+IPv4 addresses. IPv6 is presently not supported.
+
+One instance of the tool is online at:
+http://whatcloudphp.mybluemix.net/
+
+File structure:
+ index.php     - web service
+ check.php     - matching function
+ .htaccess     - web service/web server integration
+[.secret]      - create this file to access protected logs
+ cloudnets.csv - cloud provider network database
+ composer.json - no function, but required for CloudFoundry
+ manifest.yml  - project settings for CloudFoundry
+ README        - this brief documentation
